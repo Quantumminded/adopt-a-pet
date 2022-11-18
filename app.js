@@ -1,51 +1,39 @@
-const express = require('express')
-const app = express()
-const port = 3000
-
-const pets = require('./helper')
+const express = require('express');
+const app = express();
+const port = 8000;
+const animals = require('./helper');
 
 app.get('/', (req, res) => {
-    res.send (`
-      <h1>Adopt a Pet!</h1>
-      <p> Browse through the links below to find your new furry friend:.</p>
-      <ul>
-        <li><a href="/animals/dogs">Dogs</a></li>
-        <li><a href="/animals/cats">Cats</a></li>
-        <li><a href="/animals/rabbits">Rabbits</a></li>
-      </ul> `)
-  })
+  res.send(
+    `<h1>Adopt a Pet!</h1><p>Browse through the links below to find your new furry friend:</p><ul><li><a href="/animals/dogs">Dogs</a></li><li><a href="/animals/cats">Cats</a></li><li><a href="/animals/rabbits">Rabbits</a></li></ul>`
+  );
+});
 
+app.get('/animals', (req, res) => {
+  res.send(`<h1>List of pets</h1>`);
+});
 
 app.get('/animals/:pet_type', (req, res) => {
-    let pet_type = req.params.pet_type;
-    let  html='';
+  const { pet_type } = req.params;
 
-    Object.keys(pets).forEach(function (key) {
-        if (key === pet_type) {
-          for(i=0;i<pets[key].length;i++)
-            html += `<li> <a href="/animals/${key}/${pets[key][i].name}"> ${pets[key][i].name} </a></li>`
-        }
-    })
-    let results = `<ul> ${html} </ul>`
+  const html = `<h1>List of ${pet_type}</h1> <ul> ${animals[pet_type]
+    .map(
+      (animal, index) =>
+        `<li><a href=/animals/${pet_type}/${index}>${animal.name}</a></li>`
+    )
+    .join('')} </ul>`;
 
-    res.send(`<h1>List of ${pet_type} </h1> ${results} `)
-})
+  res.send(html);
+});
 
 app.get('/animals/:pet_type/:pet_id', (req, res) => {
-    let pet = req.params.pet_type.pet_id
-    
-    res.send(`
-      <h1>${req.params.name}</h1>
-      <img src="#" alt="img of pet" />
-      <p>pet’s description</p>
-      <ul>
-        <li>Pet's Breed</li>
-        <li>Age</li>
-      </ul>
-      
-      `)
-})
+  const { pet_type, pet_id } = req.params;
+  const pet = animals[pet_type][pet_id];
+  res.send(
+    `<h1>${pet.name}</h1><img src=${pet.url}/> <p>${pet.description}</p> <ul><li>${pet.breed}</li><li>${pet.age}</li></ul>`
+  );
+});
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-  })
+  console.log(`Example app listening on port ${port}`);
+});
