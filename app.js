@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const pets = require('./helper')
+
 app.get('/', (req, res) => {
     res.send (`
       <h1>Adopt a Pet!</h1>
