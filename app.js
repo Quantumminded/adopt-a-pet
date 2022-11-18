@@ -13,6 +13,11 @@ app.get('/', (req, res) => {
       </ul> `)
   })
 
+  app.get('/animals', (req, res) => {
+    res.send(`<h1>List of pets</h1>`)
+})
+
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
