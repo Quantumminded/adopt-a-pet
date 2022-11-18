@@ -23,7 +23,7 @@ app.get('/animals/:pet_type', (req, res) => {
     Object.keys(pets).forEach(function (key) {
         if (key === pet_type) {
           for(i=0;i<pets[key].length;i++)
-            html += `<li> <a href="/animals/:pet_type/:pet_id"> ${pets[key][i].name} </a></li>`
+            html += `<li> <a href="/animals/${key}/${pets[key][i].name}"> ${pets[key][i].name} </a></li>`
         }
     })
     let results = `<ul> ${html} </ul>`
@@ -33,15 +33,17 @@ app.get('/animals/:pet_type', (req, res) => {
 
 app.get('/animals/:pet_type/:pet_id', (req, res) => {
     let pet = req.params.pet_type.pet_id
-
+    
     res.send(`
-      <h1>Pet name</h1>
+      <h1>${req.params.name}</h1>
       <img src="#" alt="img of pet" />
       <p>pet’s description</p>
       <ul>
         <li>Pet's Breed</li>
-        <li>${pet.name}</li>
-      </ul>`)
+        <li>Age</li>
+      </ul>
+      
+      `)
 })
 
 app.listen(port, () => {
